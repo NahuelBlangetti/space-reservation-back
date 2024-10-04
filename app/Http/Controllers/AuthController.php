@@ -7,56 +7,74 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        // Validar los datos de entrada
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            $validated = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
 
-        // Intentar autenticar al usuario
-        if (! $token = JWTAuth::attempt($validated)) {
+            if (! $token = JWTAuth::attempt($validated)) {
+                return response()->json([
+                    'message' => 'Login information invalid.',
+                ], Response::HTTP_UNAUTHORIZED);
+            }
+
             return response()->json([
-                'message' => 'Login information invalid.',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ]);
 
-        // Si la autenticación es exitosa, devolver el token JWT
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ]);
+        } catch (\Exception $e) {
+            Log::error('Error logging in: ' . $e->getMessage());
+        }
     }
 
     public function register(Request $request)
     {
-        // Validar los datos de registro
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|max:255|email|unique:users,email',
-            'password' => 'required|confirmed|min:6',
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|max:255',
+                'email' => 'required|max:255|email|unique:users,email',
+                'password' => 'required|confirmed|min:6',
+            ]);
+        
+            $user = User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => bcrypt($validated['password']),
+            ]);
+        
+            $token = JWTAuth::fromUser($user);
+        
+            return response()->json([
+                'data' => $user,
+                'access_token' => $token,
+                'token_type' => 'Bearer',
+            ], 201);
+            
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Manejo de errores de validación
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $e->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
     
-        // Encriptar la contraseña
-        $validated['password'] = Hash::make($validated['password']);
+        } catch (\Exception $e) {
+            // Manejo de otros errores
+            Log::error('Error registering user: ' . $e->getMessage());
     
-        // Crear el usuario
-        $user = User::create($validated);
-    
-        // Generar el token JWT para el nuevo usuario
-        $token = JWTAuth::fromUser($user);
-    
-        // Devolver los datos del usuario y el token
-        return response()->json([
-            'data' => $user,
-            'access_token' => $token,
-            'token_type' => 'Bearer',
-        ], Response::HTTP_CREATED);
+            return response()->json([
+                'message' => 'Registration failed',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function unauthorized()

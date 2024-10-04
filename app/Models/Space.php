@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Symbols extends Model
+class Space extends Model
 {
     use HasFactory;
 
-    protected $table = 'symbols';
-    protected $fillable = [
-        'id',
-        'name',
-    ];
+    protected $table = 'spaces';
+    protected $fillable = ['name', 'description', 'capacity', 'type', 'is_available'];
+
 }

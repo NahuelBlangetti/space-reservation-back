@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\SpaceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,10 +17,14 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
 });
 
 
-Route::prefix('v1')->group(function () {
-    Route::middleware('jwt.auth')->group(function () {
+Route::middleware(['auth:api'])->group(function () {
+    
+    // Rutas para la gestión de espacios
+    Route::apiResource('spaces', SpaceController::class);
 
-        
-    });    
-});
+    // Rutas para la gestión de reservas
+    Route::apiResource('reservations', ReservationController::class);
+    
+});    
+
 

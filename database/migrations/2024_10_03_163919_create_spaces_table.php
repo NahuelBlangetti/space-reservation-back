@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('symbols', function (Blueprint $table) {
-            $table->string('id');
+        Schema::create('spaces', function (Blueprint $table) {
+            $table->id();
             $table->string('name');
+            $table->text('description')->nullable();
+            $table->integer('capacity');
+            $table->string('type')->nullable();
+            $table->boolean('is_available')->default(true);
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('symbols');
+        Schema::dropIfExists('spaces');
     }
 };
