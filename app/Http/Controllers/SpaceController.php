@@ -22,6 +22,7 @@ class SpaceController extends Controller
                 'description' => 'nullable|string',
                 'capacity' => 'required|integer',
                 'type' => 'nullable|string',
+                'photo' => 'nullable|string|url',
             ]);
     
             return Space::create($validated);

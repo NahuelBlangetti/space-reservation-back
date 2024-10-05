@@ -31,6 +31,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::put('spaces/{space}', [SpaceController::class, 'update']);
     Route::put('spaces/available/{space}', [SpaceController::class, 'updateAvailable']);
+    Route::post('spaces', [SpaceController::class, 'store']);
 
 });    
 

@@ -10,7 +10,7 @@ class Space extends Model
     use HasFactory;
 
     protected $table = 'spaces';
-    protected $fillable = ['name', 'description', 'capacity', 'type', 'is_available'];
+    protected $fillable = ['name', 'description', 'capacity', 'type', 'is_available','photo'];
 
     public function reservations()
     {
