@@ -10,5 +10,16 @@ class Reservations extends Model
     use HasFactory;
 
     protected $table = 'reservations';
-    protected $fillable = ['user_id', 'space_id', 'start_time', 'end_time', 'day_of_week'];
+    protected $fillable = ['user_id', 'space_id', 'start_time', 'end_time'];
+
+
+    public function space()
+    {
+        return $this->belongsTo(Space::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

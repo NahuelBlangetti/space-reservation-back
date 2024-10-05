@@ -16,15 +16,19 @@ Route::middleware('jwt.auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('spaces', [SpaceController::class, 'index']);
+Route::get('spaces/{id}', [SpaceController::class, 'showSpace']);
 
 Route::middleware(['auth:api'])->group(function () {
     
-    // Rutas para la gestión de espacios
-    Route::apiResource('spaces', SpaceController::class);
 
-    // Rutas para la gestión de reservas
-    Route::apiResource('reservations', ReservationController::class);
+    Route::get('reservations', [ReservationController::class, 'index']);
+    Route::get('reservations/{id}', [ReservationController::class, 'show']);
+    Route::post('reservations', [ReservationController::class, 'store']);
+    Route::put('reservations/{id}', [ReservationController::class, 'update']);
+    Route::delete('reservations/{id}', [ReservationController::class, 'destroy']);
     
+
 });    
 
 
