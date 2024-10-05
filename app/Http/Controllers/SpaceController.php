@@ -81,6 +81,17 @@ class SpaceController extends Controller
         }
     }
     
+    public function destroy(Space $space)
+    {
+        try {
+            $space->delete();
+            return response()->noContent();
+        } catch (\Exception $th) {
+            Log::error($th->getMessage());
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
+
 
     public function listSpaces(Request $request)
     {
@@ -112,7 +123,7 @@ class SpaceController extends Controller
     public function showSpace($id)
     {
         try {
-            $space = Space::with('photos', 'availability')->findOrFail($id);
+            $space = Space::findOrFail($id);
             return response()->json($space);
         } catch (\Exception $th) {
             Log::error($th->getMessage());

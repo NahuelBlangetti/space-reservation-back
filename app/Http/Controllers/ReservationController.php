@@ -71,7 +71,14 @@ class ReservationController extends Controller
     public function show(Reservations $Reservations)
     {
         try {
-            if ($Reservations->user_id !== Auth::id()) {
+
+            $user = Auth::user();
+            
+            if ($user->is_admin === true) {
+                return $Reservations;
+            }
+
+            if ($Reservations->user_id !== $user->id) {
                 return response()->json(['message' => 'No autorizado.'], 403);
             }
     
@@ -116,10 +123,19 @@ class ReservationController extends Controller
     public function destroy($id)
     {
         try {
-            $reservation = Reservations::where('user_id', auth()->id())->findOrFail($id);
+            #Validar si el usuario es el Admin para poder eliminar la reserva
+            $user = Auth::user();
+            if ($user->is_admin === true) {
+                $reservation = Reservations::findOrFail($id);
+            }else {
+                $reservation = Reservations::where('user_id', auth()->id())->findOrFail($id);
+            }
+
             $reservation->delete();
     
-            return response()->json(null, 204);
+            return response()->json([
+                'message' => 'Reserva eliminada con éxito',
+            ], 204);
         } catch (\Exception $th) {
             Log::error($th->getMessage());
             return response()->json(['message' => $th->getMessage()], 500);
