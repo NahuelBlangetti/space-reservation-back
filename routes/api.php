@@ -12,7 +12,7 @@ Route::post('register', [AuthController::class, 'register']);
 
 Route::get('unauthorized', [AuthController::class, 'unauthorized'])->name('unauthorized');
 
-Route::middleware('jwt.auth')->get('/user', function (Request $request) {
+Route::middleware(['auth:api'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
@@ -28,6 +28,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::put('reservations/{id}', [ReservationController::class, 'update']);
     Route::delete('reservations/{id}', [ReservationController::class, 'destroy']);
     
+
+    Route::put('spaces/{space}', [SpaceController::class, 'update']);
+    Route::put('spaces/available/{space}', [SpaceController::class, 'updateAvailable']);
 
 });    
 

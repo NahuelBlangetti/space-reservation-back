@@ -12,4 +12,8 @@ class Space extends Model
     protected $table = 'spaces';
     protected $fillable = ['name', 'description', 'capacity', 'type', 'is_available'];
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservations::class);
+    }
 }

@@ -10,7 +10,8 @@ class SpaceController extends Controller
 {
     public function index()
     {
-        return Space::all();
+        $space = Space::with(['reservations'])->where('is_available', true)->get();
+        return response()->json($space);
     }
 
     public function store(Request $request)
@@ -32,34 +33,53 @@ class SpaceController extends Controller
 
     public function update(Request $request, Space $space)
     {
+        // Aquí ya tienes el modelo Space con el ID correspondiente
+        Log::info('ID del espacio recibido', ['id' => $space->id]);
+
         try {
             $validated = $request->validate([
                 'name' => 'sometimes|required|string|max:255',
                 'description' => 'sometimes|nullable|string',
                 'capacity' => 'sometimes|required|integer',
                 'type' => 'sometimes|nullable|string',
+                'photo' => 'sometimes|nullable|string|url',
             ]);
-    
+
+            Log::info('Datos validados', ['validated' => $validated]);
+
+            Log::info('Antes de la actualización', ['space' => $space->makeHidden(['reservations'])]);
+
+            // Actualiza el modelo con los datos validados
             $space->update($validated);
-    
-            return $space;
+
+            Log::info('Después de la actualización', ['space' => $space->makeHidden(['reservations'])]);
+
+            return response()->json([
+                'message' => 'Espacio actualizado correctamente',
+                'space' => $space->makeHidden(['reservations']),
+            ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
 
-    public function destroy(Space $space)
+    
+
+    public function updateAvailable(Space $space)
     {
         try {
-            $space->delete();
-
+            $space->is_available = false;
+            
+            $space->save();
+    
             return response()->noContent();
         } catch (\Exception $th) {
             Log::error($th->getMessage());
             return response()->json(['message' => $th->getMessage()], 500);
         }
     }
+    
 
     public function listSpaces(Request $request)
     {
