@@ -1,90 +1,114 @@
-
-![Logo](https://zylalabs.com/img/logo-removebg-preview.png)
-
-
-# BASE API
-
-API Base Template
+# API Space Reservation
+Hola TOTS, se le puso amor a todo el proyecto en general, espero que les guste! 
 
 
-## Run Locally
+Requisitos previos
+Antes de comenzar, asegúrate de tener instalados los siguientes componentes:
 
-Clone the project
 
-```bash
-  git clone git@github.com:Zyla-Labs/api-base.git
-```
+1. Clonar el repositorio
 
-Rename the project directory
+git clone https://github.com/NahuelBlangetti/space-reservation-back
+cd space-reservation-back
 
-```bash
-  mv api-base my-project
-```
+2. Instalar dependencias de PHP
+Usa Composer para instalar las dependencias del proyecto.
 
-Go to the project directory
+composer install
 
-```bash
-  cd my-project
-```
 
-Delete the .git directory
+3. Configurar el archivo .env
+Copia el archivo .env.example y renómbralo como .env. Luego, configura las variables de entorno según tus necesidades, como la conexión a la base de datos.
 
-Install dependencies
+cp .env.example .env
+Configura los detalles de tu base de datos en el archivo .env:
 
-```bash
-  composer install
-```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nombre_base_datos
+DB_USERNAME=usuario
+DB_PASSWORD=contraseña
 
-Create database and config the .env file
 
-Run migrations
+4. Generar la clave de la aplicación
 
-```bash
-  php artisan migrate
-```
 
-Run Admin User Seeder
+php artisan key:generate
 
-```bash
-  php artisan db:seed --class=UserSeeder
-```
+5. Generar el token JWT_SECRET
+   
+Si el proyecto utiliza autenticación JWT, es necesario generar el token secreto para firmar los JWT. Para ello, ejecuta el siguiente comando:
 
-## Demo User Credentials
-    
-    email:adminapibase@zylalabs.com
-    password:ZylaApiBase1!
 
-## API Reference
+php artisan jwt:secret
+Este comando generará una clave aleatoria y la agregará al archivo .env como JWT_SECRET.
 
-#### Create user
+6. Migrar la base de datos
+Ejecuta las migraciones para crear las tablas en la base de datos:
 
-```http
-  POST /api/register
-```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-|   `name`  | `string` | **Required**. Your name    |
-|   `email` | `string` | **Required**. Your email   |
-|`password` | `string` | **Required**. Your password|
 
-#### Login to get access token
+php artisan migrate
+7. Ejecutar los seeders
+Para poblar la base de datos con datos iniciales, ejecuta los seeders:
 
-```http
-  POST /api/login
-```
 
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-|   `email` | `string` | **Required**. Your email   |
-|`password` | `string` | **Required**. Your password|
 
-and with this we receive the access token (bearer) to be able to use the remaining endpoints.
+php artisan db:seed
+8. Instalar dependencias de NPM (opcional)
+Si el proyecto incluye assets frontend, asegúrate de instalar las dependencias de Node.js y compilar los assets:
 
-```bash
-  {
-    "access_token": "1|laravel_sanctum_Vvh1OI04DbX1mtwSneGJ6ywMPtAousfBHi1ruynsf5ffacd9",
-    "token_type": "Bearer"
-  }
-```
 
+
+npm install
+npm run dev
+
+#Rutas de la API
+### Rutas de Autenticación
+
+POST /login: Autenticar un usuario existente.
+POST /register: Registrar un nuevo usuario.
+
+Estas rutas permiten la autenticación de usuarios mediante JWT, donde podrás obtener el token que necesitarás para acceder a las rutas protegidas.
+
+Espacios
+Estas rutas están disponibles sin autenticación:
+
+GET /spaces: Lista todos los espacios.
+GET /spaces/{id}: Muestra la información de un espacio específico.
+Reservas y Espacios protegidos
+Estas rutas requieren autenticación mediante el token JWT:
+
+Reservas
+GET /reservations: Lista todas las reservas.
+GET /reservations/{id}: Muestra la información de una reserva específica.
+POST /reservations: Crea una nueva reserva.
+PUT /reservations/{id}: Actualiza una reserva existente.
+DELETE /reservations/{id}: Elimina una reserva específica.
+Espacios (operaciones protegidas)
+PUT /spaces/{space}: Actualiza la información de un espacio específico.
+PUT /spaces/available/{space}: Actualiza la disponibilidad de un espacio.
+POST /spaces: Crea un nuevo espacio.
+DELETE /spaces/{space}: Elimina un espacio específico.
+Middleware
+Las rutas protegidas por el middleware auth:api requieren un token JWT para poder ser accedidas. Asegúrate de autenticarte antes de realizar cualquier petición a estas rutas.
+
+Levantar el servidor
+Finalmente, levanta el servidor de desarrollo con el siguiente comando:
+
+
+
+php artisan serve
+El proyecto estará disponible en http://localhost:8000.
+
+
+Usuario: user@admin.com
+Contraseña: admin123
+
+
+php artisan queue:work
+Si hay tareas programadas (cron jobs), asegúrate de añadirlas a tu cron local:
+
+
+* * * * * php /ruta-a-tu-proyecto/artisan schedule:run >> /dev/null 2>&1
