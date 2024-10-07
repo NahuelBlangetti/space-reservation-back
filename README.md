@@ -119,7 +119,6 @@ Contraseña: admin123
 
 
 php artisan queue:work
-Si hay tareas programadas (cron jobs), asegúrate de añadirlas a tu cron local:
 
 
-* * * * * php /ruta-a-tu-proyecto/artisan schedule:run >> /dev/null 2>&1
+### AVISO: Dentro del proyecto se encuentra la Collection de Postman
