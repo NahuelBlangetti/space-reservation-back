@@ -37,8 +37,9 @@ class ReservationController extends Controller
             ]);
 
 
-            // Validar que no haya conflictos de horarios
-            $conflict = Reservations::where('space_id', $validated['space_id'])
+            // Verifica disponibilidad del espacio
+            $overlapping = Reservations::where('space_id', $validated['space_id'])
+                ->where('id', '!=', $Reservations->id)
                 ->where(function ($query) use ($validated) {
                     $query->whereBetween('start_time', [$validated['start_time'], $validated['end_time']])
                         ->orWhereBetween('end_time', [$validated['start_time'], $validated['end_time']]);
@@ -46,7 +47,7 @@ class ReservationController extends Controller
                 ->exists();
     
             
-            if ($conflict) {
+            if ($overlapping) {
                 return response()->json(['message' => 'El espacio no está disponible en ese horario'], 409);
             }
     
@@ -89,35 +90,46 @@ class ReservationController extends Controller
         }
     }
 
-    public function update(Request $request, Reservations $reservation)
+    public function update(Request $request, Reservations $Reservations)
     {
         try {
             $validated = $request->validate([
-                'space_id' => 'sometimes|required|exists:spaces,id',
-                'start_time' => 'sometimes|required|date',
-                'end_time' => 'sometimes|required|date|after:start_time',
+                'user_id' => 'required|exists:users,id',
+                'space_id' => 'required|exists:spaces,id',
+                'start_time' => 'required|date',
+                'end_time' => 'required|date|after:start_time',
             ]);
-        
-            // Verifica la superposición de reservas
+            
+            // Verifica disponibilidad del espacio
             $overlapping = Reservations::where('space_id', $validated['space_id'])
-                ->where('id', '<>', $reservation->id)
+                ->where('id', '!=', $Reservations->id)
                 ->where(function ($query) use ($validated) {
                     $query->whereBetween('start_time', [$validated['start_time'], $validated['end_time']])
-                          ->orWhereBetween('end_time', [$validated['start_time'], $validated['end_time']]);
+                        ->orWhereBetween('end_time', [$validated['start_time'], $validated['end_time']]);
                 })
                 ->exists();
         
             if ($overlapping) {
                 return response()->json(['message' => 'La reserva se superpone con otra existente.'], 409);
             }
-        
-            $reservation->update($validated);
-            return response()->json($reservation);
+            
+            // Convertir las fechas al formato correcto
+            $validated['start_time'] = date('Y-m-d H:i:s', strtotime($validated['start_time']));
+            $validated['end_time'] = date('Y-m-d H:i:s', strtotime($validated['end_time']));
+    
+            // Actualizar la reserva
+            $reservationUpdate = Reservations::where('user_id', $validated['user_id'])
+                                             ->where('space_id', $validated['space_id'])
+                                             ->update($validated);
+    
+            return response()->json($reservationUpdate);
+            
         } catch (\Exception $th) {
             Log::error($th->getMessage());
             return response()->json(['message' => $th->getMessage()], 500);
         }
     }
+    
     
 
     public function destroy($id)
