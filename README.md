@@ -82,22 +82,31 @@ Estas rutas requieren autenticación mediante el token JWT:
 
 Reservas
 GET /reservations: Lista todas las reservas.
+
 GET /reservations/{id}: Muestra la información de una reserva específica.
+
 POST /reservations: Crea una nueva reserva.
+
 PUT /reservations/{id}: Actualiza una reserva existente.
+
 DELETE /reservations/{id}: Elimina una reserva específica.
+
 Espacios (operaciones protegidas)
+
 PUT /spaces/{space}: Actualiza la información de un espacio específico.
+
 PUT /spaces/available/{space}: Actualiza la disponibilidad de un espacio.
+
 POST /spaces: Crea un nuevo espacio.
+
 DELETE /spaces/{space}: Elimina un espacio específico.
+
+
 Middleware
 Las rutas protegidas por el middleware auth:api requieren un token JWT para poder ser accedidas. Asegúrate de autenticarte antes de realizar cualquier petición a estas rutas.
 
 Levantar el servidor
 Finalmente, levanta el servidor de desarrollo con el siguiente comando:
-
-
 
 php artisan serve
 El proyecto estará disponible en http://localhost:8000.
