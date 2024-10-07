@@ -60,14 +60,14 @@ class AuthController extends Controller
             ], 201);
             
         } catch (\Illuminate\Validation\ValidationException $e) {
-            // Manejo de errores de validación
+
             return response()->json([
                 'message' => 'Validation Error',
                 'errors' => $e->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
     
         } catch (\Exception $e) {
-            // Manejo de otros errores
+
             Log::error('Error registering user: ' . $e->getMessage());
     
             return response()->json([

@@ -123,7 +123,7 @@ class ReservationController extends Controller
     public function destroy($id)
     {
         try {
-            #Validar si el usuario es el Admin para poder eliminar la reserva
+
             $user = Auth::user();
             if ($user->is_admin === true) {
                 $reservation = Reservations::findOrFail($id);
