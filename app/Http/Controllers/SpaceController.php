@@ -34,7 +34,7 @@ class SpaceController extends Controller
 
     public function update(Request $request, Space $space)
     {
-        // Aquí ya tienes el modelo Space con el ID correspondiente
+
         Log::info('ID del espacio recibido', ['id' => $space->id]);
 
         try {
@@ -50,7 +50,6 @@ class SpaceController extends Controller
 
             Log::info('Antes de la actualización', ['space' => $space->makeHidden(['reservations'])]);
 
-            // Actualiza el modelo con los datos validados
             $space->update($validated);
 
             Log::info('Después de la actualización', ['space' => $space->makeHidden(['reservations'])]);
