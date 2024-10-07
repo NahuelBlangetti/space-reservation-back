@@ -72,15 +72,17 @@ POST /register: Registrar un nuevo usuario.
 
 Estas rutas permiten la autenticación de usuarios mediante JWT, donde podrás obtener el token que necesitarás para acceder a las rutas protegidas.
 
-Espacios
+### Espacios
 Estas rutas están disponibles sin autenticación:
 
 GET /spaces: Lista todos los espacios.
 GET /spaces/{id}: Muestra la información de un espacio específico.
-Reservas y Espacios protegidos
-Estas rutas requieren autenticación mediante el token JWT:
 
-Reservas
+### Reservas y Espacios protegidos
+
+Estas rutas requieren autenticación mediante el Bearer Token.
+
+### Reservas
 GET /reservations: Lista todas las reservas.
 
 GET /reservations/{id}: Muestra la información de una reserva específica.
