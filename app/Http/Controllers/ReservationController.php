@@ -27,7 +27,7 @@ class ReservationController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Reservations $Reservations)
     {
         try {
             $validated = $request->validate([
