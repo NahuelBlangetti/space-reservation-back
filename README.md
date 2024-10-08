@@ -14,29 +14,28 @@ cd space-reservation-back
 2. Instalar dependencias de PHP
 Usa Composer para instalar las dependencias del proyecto.
 
-    composer install
+       composer install
 
 
-3. Configurar el archivo .env
+4. Configurar el archivo .env
 Copia el archivo .env.example y renómbralo como .env. Luego, configura las variables de entorno según tus necesidades, como la conexión a la base de datos.
 
 cp .env.example .env
 Configura los detalles de tu base de datos en el archivo .env:
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=nombre_base_datos
-DB_USERNAME=usuario
-DB_PASSWORD=contraseña
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=nombre_base_datos
+    DB_USERNAME=usuario
+    DB_PASSWORD=contraseña
 
 
 4. Generar la clave de la aplicación
 
+        php artisan key:generate
 
-php artisan key:generate
-
-5. Generar el token JWT_SECRET
+6. Generar el token JWT_SECRET
    
 Si el proyecto utiliza autenticación JWT, es necesario generar el token secreto para firmar los JWT. Para ello, ejecuta el siguiente comando:
 
@@ -46,23 +45,15 @@ Este comando generará una clave aleatoria y la agregará al archivo .env como J
 6. Migrar la base de datos
 Ejecuta las migraciones para crear las tablas en la base de datos:
 
-    php artisan migrate
+        php artisan migrate
 
 7. Ejecutar los seeders
 Para poblar la base de datos con datos iniciales, ejecuta los seeders:
 
-    php artisan db:seed
+        php artisan db:seed
 
 
-8. Instalar dependencias de NPM (opcional)
-Si el proyecto incluye assets frontend, asegúrate de instalar las dependencias de Node.js y compilar los assets:
-
-
-
-npm install
-npm run dev
-
-#Rutas de la API
+<h2> Rutas de la API </h2>
 ### Rutas de Autenticación
 
 POST /login: Autenticar un usuario existente.
