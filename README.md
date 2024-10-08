@@ -8,8 +8,9 @@ Antes de comenzar, asegúrate de tener instalados los siguientes componentes:
 
 1. Clonar el repositorio
 
-git clone https://github.com/NahuelBlangetti/space-reservation-back
-cd space-reservation-back
+        git clone https://github.com/NahuelBlangetti/space-reservation-back
+
+        cd space-reservation-back
 
 2. Instalar dependencias de PHP
 Usa Composer para instalar las dependencias del proyecto.
