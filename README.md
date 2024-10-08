@@ -40,22 +40,20 @@ php artisan key:generate
    
 Si el proyecto utiliza autenticación JWT, es necesario generar el token secreto para firmar los JWT. Para ello, ejecuta el siguiente comando:
 
-
 php artisan jwt:secret
 Este comando generará una clave aleatoria y la agregará al archivo .env como JWT_SECRET.
 
 6. Migrar la base de datos
 Ejecuta las migraciones para crear las tablas en la base de datos:
 
-
-
 php artisan migrate
+
 7. Ejecutar los seeders
 Para poblar la base de datos con datos iniciales, ejecuta los seeders:
 
-
-
 php artisan db:seed
+
+
 8. Instalar dependencias de NPM (opcional)
 Si el proyecto incluye assets frontend, asegúrate de instalar las dependencias de Node.js y compilar los assets:
 
@@ -93,7 +91,7 @@ PUT /reservations/{id}: Actualiza una reserva existente.
 
 DELETE /reservations/{id}: Elimina una reserva específica.
 
-Espacios (operaciones protegidas)
+### Espacios (operaciones protegidas)
 
 PUT /spaces/{space}: Actualiza la información de un espacio específico.
 
@@ -104,21 +102,19 @@ POST /spaces: Crea un nuevo espacio.
 DELETE /spaces/{space}: Elimina un espacio específico.
 
 
-Middleware
+### Middleware
 Las rutas protegidas por el middleware auth:api requieren un token JWT para poder ser accedidas. Asegúrate de autenticarte antes de realizar cualquier petición a estas rutas.
 
-Levantar el servidor
+### Levantar el servidor
 Finalmente, levanta el servidor de desarrollo con el siguiente comando:
 
 php artisan serve
+
 El proyecto estará disponible en http://localhost:8000.
 
-
-Usuario: user@admin.com
-Contraseña: admin123
-
-
-php artisan queue:work
-
+### Usuario: 
+    user@admin.com
+### Contraseña: 
+    admin123
 
 ### AVISO: Dentro del proyecto se encuentra la Collection de Postman
