@@ -14,7 +14,7 @@ cd space-reservation-back
 2. Instalar dependencias de PHP
 Usa Composer para instalar las dependencias del proyecto.
 
-composer install
+    composer install
 
 
 3. Configurar el archivo .env
@@ -40,18 +40,18 @@ php artisan key:generate
    
 Si el proyecto utiliza autenticación JWT, es necesario generar el token secreto para firmar los JWT. Para ello, ejecuta el siguiente comando:
 
-php artisan jwt:secret
+    php artisan jwt:secret
 Este comando generará una clave aleatoria y la agregará al archivo .env como JWT_SECRET.
 
 6. Migrar la base de datos
 Ejecuta las migraciones para crear las tablas en la base de datos:
 
-php artisan migrate
+    php artisan migrate
 
 7. Ejecutar los seeders
 Para poblar la base de datos con datos iniciales, ejecuta los seeders:
 
-php artisan db:seed
+    php artisan db:seed
 
 
 8. Instalar dependencias de NPM (opcional)
@@ -108,7 +108,7 @@ Las rutas protegidas por el middleware auth:api requieren un token JWT para pode
 ### Levantar el servidor
 Finalmente, levanta el servidor de desarrollo con el siguiente comando:
 
-php artisan serve
+    php artisan serve
 
 El proyecto estará disponible en http://localhost:8000.
 
