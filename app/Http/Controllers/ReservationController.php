@@ -27,6 +27,22 @@ class ReservationController extends Controller
         }
     }
 
+    public function allReservations() {
+        try {
+            $reservations = Reservations::with(['space', 'user'])
+            ->get();
+    
+            return response()->json([
+                'success' => true,
+                'reservations' => $reservations
+            ]);
+        } catch (\Exception $th) {
+            Log::error($th->getMessage());
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
+    }
+
+
     public function store(Request $request, Reservations $Reservations)
     {
         try {
